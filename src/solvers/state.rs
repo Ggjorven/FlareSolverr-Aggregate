@@ -24,10 +24,10 @@ impl SolversState {
 
         let mut solvers: Vec<Arc<dyn Solver>> = Vec::new();
         if let Some(flaresolverr_url) = &environment.flaresolverr_url {
-            solvers.push(Arc::new(FlareSolverrSolver::new(flaresolverr_url.to_string())));
+            solvers.push(Arc::new(FlareSolverrSolver::new("flaresolverr".to_string(), flaresolverr_url.to_string())));
         }
         if let Some(byparr_url) = &environment.byparr_url {
-            solvers.push(Arc::new(FlareSolverrSolver::new(byparr_url.to_string())));
+            solvers.push(Arc::new(FlareSolverrSolver::new("byparr".to_string(), byparr_url.to_string())));
         }
 
         Self {
