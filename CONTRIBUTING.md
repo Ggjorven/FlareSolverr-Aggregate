@@ -33,3 +33,6 @@ To contribute to the backend follow these steps:
 5. Run the linter (`cargo clippy`)
 6. Format your code (`cargo +nightly fmt` from [`rustfmt`](https://github.com/rust-lang/rustfmt))
 7. Open a pull request with a clear description of what you changed and why
+
+The main areas to target are consistency across code, and using the proper types so Url instead of String.  
+This code has been slapped together really quick so there are lots of opportunities for cleanup.
