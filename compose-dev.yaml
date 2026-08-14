@@ -11,7 +11,7 @@ services:
     image: ghcr.io/thephaseless/byparr:latest
     container_name: byparr
     environment:
-      - LOG_LEVEL=INFO
+      - LOG_LEVEL=info
       - PORT=8193
     restart: unless-stopped
 
