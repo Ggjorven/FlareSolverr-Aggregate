@@ -62,6 +62,8 @@ The container is configured through environment variables:
 
 | Variable | Default | Description |
 |---|---|---|
+| `PUID` | `1000` | The user the program runs as |
+| `PGID` | `1000` | The group the program runs as |
 | `LOG_LEVEL` | `info` | Log verbosity: `debug` / `info` / `warning` / `error` |
 | `PORT` | `8191` | Port the API is exposed on |
 | `FLARESOLVERR_URL` | - | FlareSolverr endpoint (may be empty) |
