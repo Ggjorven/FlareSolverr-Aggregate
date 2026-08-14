@@ -53,7 +53,7 @@ ARG PUID=1000
 ARG PGID=1000
 ARG TZ=UTC
 
-ARG APP_BIN=flaresolverr-aggregate
+ARG APP_BIN=flaresolverr_aggregate
 ARG APP_USER=flaresolverraggregate
 ARG PORT=8191
 
@@ -80,9 +80,6 @@ RUN apk add --no-cache \
 COPY --from=rust-builder /build/target/release/${APP_BIN} /app/${APP_BIN}
 RUN chmod +x /app/${APP_BIN} 
 
-# Copy web files
-COPY web/src/ ./web
-
 # Copy entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
@@ -94,4 +91,4 @@ HEALTHCHECK --interval=20s --timeout=5s --start-period=10s --retries=3 \
 	CMD curl -s "http://localhost:${PORT}/health"
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/app/flaresolverr-aggregate"]
+CMD ["/app/flaresolverr_aggregate"]
