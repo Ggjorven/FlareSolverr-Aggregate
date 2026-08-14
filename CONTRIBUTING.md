@@ -35,4 +35,5 @@ To contribute to the backend follow these steps:
 7. Open a pull request with a clear description of what you changed and why
 
 The main areas to target are consistency across code, and using the proper types so Url instead of String.  
+Other areas are having good errors and good error messages and keeping that consistent.  
 This code has been slapped together really quick so there are lots of opportunities for cleanup.
