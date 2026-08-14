@@ -27,7 +27,7 @@ impl SolversState {
             solvers.push(Arc::new(FlareSolverrSolver::new(flaresolverr_url.to_string())));
         }
         if let Some(byparr_url) = &environment.byparr_url {
-            todo!()
+            solvers.push(Arc::new(FlareSolverrSolver::new(byparr_url.to_string())));
         }
 
         Self {
@@ -70,7 +70,12 @@ impl SolversState {
         Err(())
     }
 
-    pub async fn session_cmd(&self, payload: Value, timeout: u64) -> Result<Value, ()> {
-        todo!()
+    pub async fn session_cmd(&self, payload: Value) -> Result<Value, ()> {
+        if self.solvers.is_empty() {
+            error!("[proxy] No enabled solvers.");
+            return Err(());
+        }
+
+        self.solvers.first().unwrap().session(self.client.clone(), payload).await
     }
 }

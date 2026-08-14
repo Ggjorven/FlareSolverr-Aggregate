@@ -9,12 +9,13 @@ use crate::solvers::Solver;
 // Solver
 /////////////////////////////////////////////////////
 pub struct FlareSolverrSolver {
+    name: String,
     url: String,
 }
 
 impl FlareSolverrSolver {
-    pub fn new(url: String) -> Self {
-        Self { url: url }
+    pub fn new(name: String, url: String) -> Self {
+        Self { name: name, url: url }
     }
 }
 
@@ -22,14 +23,14 @@ impl FlareSolverrSolver {
 impl Solver for FlareSolverrSolver {
     async fn request(&self, client: Client, payload: Value, timeout: u64) -> Result<Value, ()> {
         let target = payload.get("url").and_then(Value::as_str).unwrap_or("?").to_string();
-        info!("[flaresolverr] Trying: {}...", target);
+        info!("[{}] Trying: {}...", self.name, target);
 
         let send = client.post(&self.url).json(&payload).timeout(Duration::from_millis(timeout)).send().await;
 
         let response = match send {
             Ok(response) => response,
             Err(error) => {
-                warning!("[flaresolverr] Request failed: {}", error);
+                warning!("[{}] Request failed: {}", self.name, error);
                 return Err(());
             },
         };
@@ -37,25 +38,25 @@ impl Solver for FlareSolverrSolver {
         let data: Value = match response.json().await {
             Ok(data) => data,
             Err(error) => {
-                warning!("[flaresolverr] Bad response body: {}", error);
+                warning!("[{}] Bad response body: {}", self.name, error);
                 return Err(());
             },
         };
 
         let status = data.get("status").and_then(Value::as_str).unwrap_or("");
         if status == "ok" {
-            info!("[flaresolverr] succeeded");
+            info!("[{}] succeeded", self.name);
             Ok(data)
         } else {
             let msg = data.get("message").and_then(Value::as_str).unwrap_or("unknown");
-            warning!("[flaresolverr] status={status:?}: {msg}");
+            warning!("[{}] status={:?}: {}", self.name, status, msg);
             Err(())
         }
     }
 
     async fn session(&self, client: Client, payload: Value) -> Result<Value, ()> {
         let cmd = payload.get("cmd").and_then(Value::as_str).unwrap_or("?");
-        info!("[flaresolverr] -> (session) {}", cmd);
+        info!("[{}] -> (session) {}", self.name, cmd);
 
         let resp = client
             .post(&self.url)

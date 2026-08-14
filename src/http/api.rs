@@ -35,11 +35,10 @@ pub async fn v1(State(state): State<Arc<AppState>>, Json(payload): Json<Value>) 
     trace!("Received /v1 with payload {:?}", payload);
 
     let cmd = payload.get("cmd").and_then(Value::as_str).unwrap_or("");
-    let max_timeout = payload.get("maxTimeout").and_then(Value::as_u64).unwrap_or(60000);
 
     // Session commands are solver-specific, forward to first available only.
     if cmd.starts_with("sessions.") {
-        match state.solvers.session_cmd(payload, max_timeout).await {
+        match state.solvers.session_cmd(payload).await {
             Ok(result) => Ok(Json(result)),
             Err(_error) => Err((
                 StatusCode::INTERNAL_SERVER_ERROR,
@@ -47,6 +46,7 @@ pub async fn v1(State(state): State<Arc<AppState>>, Json(payload): Json<Value>) 
             )),
         }
     } else if cmd.starts_with("request.") {
+        let max_timeout = payload.get("maxTimeout").and_then(Value::as_u64).unwrap_or(60000);
         let start = Instant::now();
 
         match state.solvers.request_cmd(payload, max_timeout).await {

@@ -3,7 +3,7 @@ use std::env;
 use thiserror::Error;
 use url::Url;
 
-use crate::{logging::LogLevel, warning};
+use crate::{logging::LogLevel};
 
 /////////////////////////////////////////////////////
 // EnvError
@@ -108,7 +108,7 @@ impl EnvOptions {
         };
 
         let byparr_url = Url::parse(byparr_url.as_str()).map_err(|error| {
-            return EnvError::InvalidFlaresolverrUrl {
+            return EnvError::InvalidByparrUrl {
                 url: byparr_url,
                 error: error,
             };
