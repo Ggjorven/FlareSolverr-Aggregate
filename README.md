@@ -52,6 +52,8 @@ The container is configured through environment variables:
 | `LOG_LEVEL` | `info` | Log verbosity: `debug` / `info` / `warning` / `error` |
 | `PORT` | `8191` | Port the API is exposed on |
 | `FLARESOLVERR_URL` | - | FlareSolverr endpoint (may be empty) |
+| `BYPARR_URL` | - | Byparr endpoint (may be empty) |
+| `CFBYPASSFORSCRAPING_URL` | - | CloudflareBypassForScraping endpoint (may be empty) |
 
 ## Usage
 
