@@ -6,7 +6,7 @@ A very simple docker container that can have multiple cloudflare solvers and agg
 
 - [FlareSolverr](https://github.com/Flaresolverr/Flaresolverr) (obviously)
 - [Byparr](https://github.com/ThePhaseless/Byparr/)
-- [CloudflareBypassForScraping](https://github.com/sarperavci/CloudflareBypassForScraping)
+- [CloudflareBypassForScraping](https://github.com/sarperavci/CloudflareBypassForScraping) // TODO
 
 ## Installation
 
