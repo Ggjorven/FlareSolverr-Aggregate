@@ -5,7 +5,8 @@ A very simple docker container that can have multiple cloudflare solvers and agg
 ## Support for
 
 - [FlareSolverr](https://github.com/Flaresolverr/Flaresolverr) (obviously)
-- [Byparr](https://github.com/ThePhaseless/Byparr/)
+- [Byparr](https://github.com/ThePhaseless/Byparr)
+- [Trawl](https://github.com/germondai/trawl)
 - [CloudflareBypassForScraping](https://github.com/sarperavci/CloudflareBypassForScraping) // TODO
 
 ## Installation
@@ -34,6 +35,14 @@ services:
       - PORT=8193
     restart: unless-stopped
 
+  trawl:
+    image: ghcr.io/germondai/trawl:latest
+    container_name: trawl
+    environment:
+      - LOG_LEVEL=info
+      - PORT=8194
+    restart: unless-stopped
+
   flaresolverr-aggregate:
     image: ghcr.io/ggjorven/flaresolverr-aggregate:latest
     container_name: flaresolverr-aggregate
@@ -41,11 +50,13 @@ services:
       - LOG_LEVEL=info
       - FLARESOLVERR_URL=http://flaresolverr:8192/v1
       - BYPARR_URL=http://byparr:8193/v1
+      - TRAWL_URL=http://trawl:8194/v1
     ports:
       - 8191:8191
     depends_on:
       - flaresolverr
       - byparr
+      - trawl
     restart: unless-stopped
 
 ```
@@ -69,10 +80,11 @@ The container is configured through environment variables:
 | `PORT` | `8191` | Port the API is exposed on |
 | `FLARESOLVERR_URL` | - | FlareSolverr endpoint (may be empty) |
 | `BYPARR_URL` | - | Byparr endpoint (may be empty) |
+| `TRAWL_URL` | - | Trawl endpoint (may be empty) |
 
 ## Usage
 
-This container follows the same **FlareSolverr** standard that [FlareSolverr](https://github.com/Flaresolverr/Flaresolverr) and [Byparr](https://github.com/ThePhaseless/Byparr/) use.  
+This container follows the same **FlareSolverr** standard that [FlareSolverr](https://github.com/Flaresolverr/Flaresolverr), [Byparr](https://github.com/ThePhaseless/Byparr/) and [Trawl](https://github.com/germondai/trawl) use.  
 For a more complete reference see [FlareSolverr's README](https://github.com/Flaresolverr/Flaresolverr#commands).
 
 ## Contributing

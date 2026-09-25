@@ -18,6 +18,8 @@ pub enum EnvError {
     InvalidFlaresolverrUrl { url: String, error: url::ParseError },
     #[error("BYPARR_URL is set to an invalid url \"{url}\", error: {error}")]
     InvalidByparrUrl { url: String, error: url::ParseError },
+    #[error("TRAWL_URL is set to an invalid url \"{url}\", error: {error}")]
+    InvalidTrawlUrl { url: String, error: url::ParseError },
 }
 
 /////////////////////////////////////////////////////
@@ -29,6 +31,7 @@ pub struct EnvOptions {
     pub port: u16,
     pub flaresolverr_url: Option<Url>,
     pub byparr_url: Option<Url>,
+    pub trawl_url: Option<Url>,
 }
 
 impl Default for EnvOptions {
@@ -38,6 +41,7 @@ impl Default for EnvOptions {
             port: 8091,
             flaresolverr_url: None,
             byparr_url: None,
+            trawl_url: None,
         }
     }
 }
@@ -50,9 +54,10 @@ impl EnvOptions {
         let port = Self::parse_port()?;
         let flaresolverr_url = Self::parse_flaresolverr_url()?;
         let byparr_url = Self::parse_byparr_url()?;
+        let trawl_url = Self::parse_trawl_url()?;
 
-        if flaresolverr_url.is_none() && byparr_url.is_none() {
-            warning!("No proxy url set up, set FLARESOLVERR_URL or BYPARR_URL.");
+        if flaresolverr_url.is_none() && byparr_url.is_none() && trawl_url.is_none() {
+            warning!("No proxy url set up, set FLARESOLVERR_URL, BYPARR_URL or TRAWL_URL.");
         }
 
         Ok(Self {
@@ -60,6 +65,7 @@ impl EnvOptions {
             port: port.unwrap_or(default.port),
             flaresolverr_url: flaresolverr_url,
             byparr_url: byparr_url,
+            trawl_url: trawl_url,
         })
     }
 
@@ -115,5 +121,20 @@ impl EnvOptions {
         })?;
 
         Ok(Some(byparr_url))
+    }
+
+    fn parse_trawl_url() -> Result<Option<Url>, EnvError> {
+        let Ok(trawl_url) = env::var("TRAWL_URL") else {
+            return Ok(None);
+        };
+
+        let trawl_url = Url::parse(trawl_url.as_str()).map_err(|error| {
+            return EnvError::InvalidTrawlUrl {
+                url: trawl_url,
+                error: error,
+            };
+        })?;
+
+        Ok(Some(trawl_url))
     }
 }
