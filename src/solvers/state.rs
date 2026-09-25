@@ -29,6 +29,9 @@ impl SolversState {
         if let Some(byparr_url) = &environment.byparr_url {
             solvers.push(Arc::new(FlareSolverrSolver::new("byparr".to_string(), byparr_url.to_string())));
         }
+        if let Some(trawl_url) = &environment.trawl_url {
+            solvers.push(Arc::new(FlareSolverrSolver::new("trawl".to_string(), trawl_url.to_string())));
+        }
 
         Self {
             client: client,
